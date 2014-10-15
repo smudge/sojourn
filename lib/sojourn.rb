@@ -1,5 +1,6 @@
 require 'sojourn/version'
+require 'sojourn/visitor'
+require 'sojourn/visit'
+require 'sojourn/controller'
 
-module Sojourn
-  # Your code goes here...
-end
+ActionController::Base.send :include, Sojourn::Controller

@@ -10,5 +10,17 @@ module Sojourn
 
     before_create { self.uuid = SecureRandom.uuid }
 
+    def self.create_from_request!(request, visitor)
+      create! referrer: request.referer,
+              host: request.host,
+              path: request.path,
+              utm_source: request.params[:utm_source],
+              utm_medium: request.params[:utm_medium],
+              utm_term: request.params[:utm_term],
+              utm_content: request.params[:utm_content],
+              utm_campaign: request.params[:utm_campaign],
+              visitor: visitor
+    end
+
   end
 end

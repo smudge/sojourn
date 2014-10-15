@@ -11,5 +11,9 @@ module Sojourn
 
     before_create { self.uuid = SecureRandom.uuid }
 
+    def self.create_from_request!(request, user = nil)
+      create! ip_address: request.remote_ip, user_agent: request.user_agent, user: user
+    end
+
   end
 end
