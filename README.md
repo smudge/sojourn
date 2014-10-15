@@ -19,9 +19,9 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
+To install migrations, execute:
 
-    $ gem install sojourn
+    $ rails g sojourn:install
 
 ## How It Works
 
@@ -34,3 +34,11 @@ Sojourn will create a new "visit" event each time any of the following are true:
 * If the request has any UTM data attached (utm_source, utm_campaign, etc)
 
 In this way, you know each time someone visits your site through an external source.
+
+## Current Limitations (i.e. the 'todo' list)
+
+* Tested only on rails 3.2.18 and ruby 2.0.0 with ActiveRecord and PostgreSQL.
+* Assumes `User` class exists.
+* Assumes `current_user` is defined in controllers.
+* Relies on cookies to track visitor UUID across requests.
+* There are no tests.
