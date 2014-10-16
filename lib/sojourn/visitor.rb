@@ -1,3 +1,4 @@
+require 'browser'
 module Sojourn
 
   def self.table_name_prefix
@@ -17,6 +18,11 @@ module Sojourn
 
     class << self
 
+      def find_or_create_from_request(request, session, user = nil)
+        return if bot?(request)
+        find_from_session(session, user) || create_from_request!(request, session, user)
+      end
+
       def find_from_session(session, user = nil)
         with_user where(uuid: session[:visitor_uuid]).unexpired.last, session, user
       end
@@ -28,6 +34,10 @@ module Sojourn
       end
 
     private
+
+      def bot?(request)
+        Browser.new(user_agent: request.user_agent).bot?
+      end
 
       def with_user(visitor, session, user)
         return visitor if visitor.nil? || visitor.user_id == user.try(:id)
