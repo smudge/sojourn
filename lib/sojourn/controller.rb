@@ -6,7 +6,7 @@ module Sojourn
     end
 
     def current_visit
-      @current_visit ||= current_visitor.visits.unexpired.last
+      @current_visit ||= Visit.find_from_request(request, current_visitor)
       @current_visit ||= Visit.create_from_request!(request, current_visitor)
     end
 
