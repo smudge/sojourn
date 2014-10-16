@@ -20,11 +20,12 @@ module Sojourn
     end
 
     def current_visitor
-      if session[:visitor_uuid].nil?
+      if session[:visitor_uuid]
+        @current_visitor = Visitor.where(uuid: session[:visitor_uuid]).unexpired.last
+      end
+      unless @current_visitor
         @current_visitor = Visitor.create_from_request!(request, current_user)
         session[:visitor_uuid] = @current_visitor.uuid
-      else
-        @current_visitor ||= Visitor.find_by_uuid!(session[:visitor_uuid])
       end
       @current_visitor
     end

@@ -29,7 +29,7 @@ Sojourn assigns each visitor a unique UUID, which is tracked across requests.
 
 Sojourn will create a new "visit" event each time any of the following are true:
 
-* No visitor exists in the session, or visitor has expired (default: 1 month)
+* No visitor exists in the session, or visitor has expired (default: 1 week)
 * If the request has a 'referer' and it does not match the host.
 * If the request has any UTM data attached (utm_source, utm_campaign, etc)
 

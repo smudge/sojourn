@@ -9,6 +9,8 @@ module Sojourn
     has_many :visits, foreign_key: :sojourn_visitor_id
     belongs_to :user
 
+    scope :unexpired, -> { where('sojourn_visitors.created_at > ?', 1.week.ago) }
+
     before_create { self.uuid = SecureRandom.uuid }
 
     def self.create_from_request!(request, user = nil)
