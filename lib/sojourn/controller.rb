@@ -3,11 +3,12 @@ module Sojourn
 
     def self.included(base)
       base.before_filter :check_sojourn_user
-      base.before_filter :track_sojourn_visit
+      base.before_filter :current_visit
     end
 
-    def track_sojourn_visit
-      Visit.create_from_request!(request, current_visitor) if current_visitor.visits.empty?
+    def current_visit
+      @current_visit ||= current_visitor.visits.last
+      @current_visit ||= Visit.create_from_request!(request, current_visitor)
     end
 
     def check_sojourn_user
