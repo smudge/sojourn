@@ -5,7 +5,7 @@ class CreateSojournVisitors < ActiveRecord::Migration
       t.string :ip_address
       t.text :user_agent
       t.references :user
-      t.timestamps
+      t.timestamp :created_at
     end
     add_index :sojourn_visitors, [:user_id]
   end

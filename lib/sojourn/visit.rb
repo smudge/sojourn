@@ -8,6 +8,8 @@ module Sojourn
     belongs_to :visitor, foreign_key: :sojourn_visitor_id
     has_one :user, through: :visitor
 
+    scope :unexpired, -> { where('last_active_at > ?', 1.day.ago) }
+
     before_create { self.uuid = SecureRandom.uuid }
 
     def self.create_from_request!(request, visitor)

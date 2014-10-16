@@ -9,7 +9,9 @@ module Sojourn
     has_many :visits, foreign_key: :sojourn_visitor_id
     belongs_to :user
 
-    scope :unexpired, -> { where('sojourn_visitors.created_at > ?', 1.week.ago) }
+    scope :unexpired, (lambda do
+      eager_load(:visits).where('sojourn_visits.last_active_at > ?', 1.week.ago)
+    end)
 
     before_create { self.uuid = SecureRandom.uuid }
 

@@ -11,7 +11,8 @@ class CreateSojournVisits < ActiveRecord::Migration
       t.string :utm_term
       t.string :utm_content
       t.string :utm_campaign
-      t.timestamps
+      t.timestamp :created_at
+      t.timestamp :last_active_at
     end
     add_index :sojourn_visits, [:sojourn_visitor_id]
   end
