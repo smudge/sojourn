@@ -26,7 +26,7 @@ module Sojourn
       def create_from_request!(request, visitor)
         create! referrer: request.referer,
                 host: request.host,
-                path: request.path,
+                path: request.fullpath,
                 utm_source: request.params[:utm_source],
                 utm_medium: request.params[:utm_medium],
                 utm_term: request.params[:utm_term],
