@@ -14,11 +14,6 @@ module Sojourn
 
     class << self
 
-      def find_or_create_from_request(request, visitor)
-        return unless visitor
-        find_from_request(request, visitor) || create_from_request!(request, visitor)
-      end
-
       def find_from_request(request, visitor)
         visitor.visits.unexpired.last unless new_visit_required?(request)
       end
