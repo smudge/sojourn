@@ -6,11 +6,11 @@ module Sojourn
     end
 
     def current_visit
-      @current_visit ||= Visit.find_from_request(request, current_visitor)
+      @current_visit ||= Visit.find_by_uuid(session[:sojourner_visit_uuid])
     end
 
     def current_visitor
-      @current_visitor ||= Visitor.find_from_uuid(session[:sojourner_visitor_uuid], current_user)
+      @current_visitor ||= Visitor.find_by_uuid(session[:sojourner_visitor_uuid])
     end
 
     def track_sojourner
@@ -20,7 +20,7 @@ module Sojourn
         session[:sojourner_visitor_uuid] = @current_visitor.uuid
         session[:sojourner_current_user_id] = current_user.try(:id)
       elsif current_user.try(:id) != session[:sojourner_current_user_id]
-        if session[:sojourner_current_user_id].blank?
+        if session[:sojourner_current_user_id].blank? && session[:sojourner_visitor_uuid]
           session[:sojourner_current_user_id] = current_user.try(:id)
           current_visitor.update_attributes(user_id: current_user.try(:id))
         else
@@ -31,7 +31,8 @@ module Sojourn
           session[:sojourner_last_active_at] = nil
         end
       end
-      if session[:sojourner_visit_uuid].blank? || session[:sojourner_last_active_at] < 1.day.ago
+      if session[:sojourner_visit_uuid].blank? || session[:sojourner_last_active_at] < 1.day.ago ||
+         Sojourn.new_visit_required?(request)
         @current_visit = Visit.create_from_request!(request, current_visitor)
         session[:sojourner_visit_uuid] = @current_visit.uuid
       end
