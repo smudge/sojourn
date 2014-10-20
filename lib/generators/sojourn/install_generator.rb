@@ -16,6 +16,10 @@ module Sojourn
         end
       end
 
+      def create_config_file
+        template "config_initializer.rb", "config/initializers/sojourn.rb"
+      end
+
       def create_migrations
         %w(create_sojourn_visitors create_sojourn_visits).each do |name|
           migration_template "#{name}.rb", "db/migrate/#{name}.rb"
