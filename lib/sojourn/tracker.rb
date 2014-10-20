@@ -103,11 +103,7 @@ module Sojourn
     end
 
     def any_utm_data?
-      request.params[:utm_source].present?  ||
-      request.params[:utm_medium].present?  ||
-      request.params[:utm_term].present?    ||
-      request.params[:utm_content].present? ||
-      request.params[:utm_campaign].present?
+      Sojourn.config.campaign_params.map { |p| request.params[p].present? }.any?
     end
   end
 end

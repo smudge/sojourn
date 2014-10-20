@@ -1,3 +1,4 @@
+require_relative 'campaign'
 module Sojourn
   def self.table_name_prefix
     'sojourn_'
@@ -6,6 +7,7 @@ module Sojourn
   class Visit < ActiveRecord::Base
 
     belongs_to :visitor, foreign_key: :sojourn_visitor_id
+    belongs_to :campaign, foreign_key: :sojourn_campaign_id
     has_one :user, through: :visitor
 
     before_create { self.uuid = SecureRandom.uuid }
@@ -16,11 +18,7 @@ module Sojourn
         create! referrer: request.referer,
                 host: request.host,
                 path: request.fullpath,
-                utm_source: request.params[:utm_source],
-                utm_medium: request.params[:utm_medium],
-                utm_term: request.params[:utm_term],
-                utm_content: request.params[:utm_content],
-                utm_campaign: request.params[:utm_campaign],
+                campaign: Campaign.from_request(request),
                 visitor: visitor
       end
 

@@ -21,7 +21,7 @@ module Sojourn
       end
 
       def create_migrations
-        %w(create_sojourn_visitors create_sojourn_visits).each do |name|
+        %w(create_sojourn_visitors create_sojourn_campaigns create_sojourn_visits).each do |name|
           migration_template "#{name}.rb", "db/migrate/#{name}.rb"
           sleep 1
         end
