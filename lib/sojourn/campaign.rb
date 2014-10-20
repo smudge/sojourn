@@ -7,13 +7,14 @@ module Sojourn
     class << self
 
       def from_request(request)
-        where(path: request.path).where(params: param_string(request.params)).first_or_initialize
+        return unless (tracked_params = tracked_params(request.params)).any?
+        where(path: request.path).where(params: tracked_params.to_param).first_or_initialize
       end
 
     private
 
-      def param_string(params)
-        params.slice(*Sojourn.config.campaign_params).to_param
+      def tracked_params(params)
+        params.slice(*Sojourn.config.campaign_params).delete_if { |k,v| v.blank? }
       end
 
     end
