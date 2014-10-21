@@ -21,9 +21,13 @@ module Sojourn
       end
 
       def create_migrations
-        %w(create_sojourn_visitors create_sojourn_campaigns create_sojourn_visits).each do |name|
-          migration_template "#{name}.rb", "db/migrate/#{name}.rb"
-          sleep 1
+        %w(visitors campaigns visits).map { |m| "create_sojourn_#{m}" }.each do |name|
+          if self.class.migration_exists?('db/migrate', name)
+            say "        #{set_color("skip", :yellow)}  #{name}.rb (migration already exists)"
+          else
+            migration_template "#{name}.rb", "db/migrate/#{name}.rb"
+            sleep 1
+          end
         end
       end
     end
