@@ -8,6 +8,7 @@ module Sojourn
   class Visitor < ActiveRecord::Base
 
     has_many :visits, foreign_key: :sojourn_visitor_id
+    has_many :events, through: :visits
     belongs_to :user
 
     before_create { self.uuid = SecureRandom.uuid }

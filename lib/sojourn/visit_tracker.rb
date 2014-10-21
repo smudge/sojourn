@@ -1,7 +1,7 @@
 require_relative 'visitor'
 require_relative 'visit'
 module Sojourn
-  class Tracker
+  class VisitTracker
 
     def initialize(request, session, current_user = nil)
       self.request, self.session, self.current_user = request, session, current_user

@@ -9,6 +9,7 @@ module Sojourn
     belongs_to :visitor, foreign_key: :sojourn_visitor_id
     belongs_to :campaign, foreign_key: :sojourn_campaign_id
     has_one :user, through: :visitor
+    has_many :events, foreign_key: :sojourn_visit_id
 
     before_create { self.uuid = SecureRandom.uuid }
 
