@@ -15,8 +15,11 @@ module Sojourn
 
     class << self
 
-      def create_from_request!(request, user = nil)
-        create! ip_address: request.remote_ip, user_agent: request.user_agent, user: user
+      def create_from_request!(request, user = nil, time = Time.now)
+        create! ip_address: request.remote_ip,
+                user_agent: request.user_agent,
+                user: user,
+                created_at: time
       end
 
     end

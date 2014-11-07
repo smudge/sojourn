@@ -15,12 +15,13 @@ module Sojourn
 
     class << self
 
-      def create_from_request!(request, visitor)
+      def create_from_request!(request, visitor, time = Time.now)
         create! referrer: request.referer,
                 host: request.host,
                 path: request.fullpath,
                 campaign: Campaign.from_request(request),
-                visitor: visitor
+                visitor: visitor,
+                created_at: time
       end
 
     end
