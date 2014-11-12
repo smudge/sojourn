@@ -8,19 +8,20 @@ module Sojourn
 
     belongs_to :visitor, foreign_key: :sojourn_visitor_id
     belongs_to :campaign, foreign_key: :sojourn_campaign_id
-    has_one :user, through: :visitor
+    belongs_to :user
     has_many :events, foreign_key: :sojourn_visit_id
 
     before_create { self.uuid = SecureRandom.uuid }
 
     class << self
 
-      def create_from_request!(request, visitor, time = Time.now)
+      def create_from_request!(request, visitor, user = nil, time = Time.now)
         create! referrer: request.referer.try(:truncate, 2048),
                 host: request.host.try(:truncate, 2048),
                 path: request.fullpath.try(:truncate, 2048),
                 campaign: Campaign.from_request(request),
                 visitor: visitor,
+                user: user,
                 created_at: time
       end
 

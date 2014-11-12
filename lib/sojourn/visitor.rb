@@ -9,16 +9,15 @@ module Sojourn
 
     has_many :visits, foreign_key: :sojourn_visitor_id
     has_many :events, through: :visits
-    belongs_to :user
+    has_many :users, through: :visits
 
     before_create { self.uuid = SecureRandom.uuid }
 
     class << self
 
-      def create_from_request!(request, user = nil, time = Time.now)
+      def create_from_request!(request, time = Time.now)
         create! ip_address: request.remote_ip,
                 user_agent: request.user_agent,
-                user: user,
                 created_at: time
       end
 

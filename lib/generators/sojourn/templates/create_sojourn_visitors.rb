@@ -4,9 +4,8 @@ class CreateSojournVisitors < ActiveRecord::Migration
       t.string :uuid, limit: 36, unique: true, null: false
       t.string :ip_address
       t.text :user_agent
-      t.references :user
       t.timestamp :created_at
     end
-    add_index :sojourn_visitors, [:user_id]
+    add_index :sojourn_visitors, [:uuid]
   end
 end
