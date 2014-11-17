@@ -8,11 +8,11 @@ module Sojourn
     end
 
     def current_visit
-      @current_visit ||= Visit.find_by_uuid(session[:sojourner_visit_uuid])
+      @current_visit ||= Visit.find_by_uuid(session[:sojourn_visit_uuid])
     end
 
     def current_visitor
-      @current_visitor ||= Visitor.find_by_uuid(session[:sojourner_visitor_uuid])
+      @current_visitor ||= Visitor.find_by_uuid(session[:sojourn_visitor_id])
     end
 
     def track!(time = Time.now)
@@ -28,24 +28,24 @@ module Sojourn
 
     def track_visitor!(time = Time.now)
       @current_visitor = Visitor.create_from_request!(request, time)
-      session[:sojourner_visitor_uuid] = @current_visitor.uuid
-      session[:sojourner_visit_uuid] = nil
-      session[:sojourner_last_active_at] = nil
+      session[:sojourn_visitor_id] = @current_visitor.uuid
+      session[:sojourn_visit_uuid] = nil
+      session[:sojourn_last_active_at] = nil
     end
 
     def track_visit!(time = Time.now)
       @current_visit = Visit.create_from_request!(request, current_visitor, current_user, time)
-      session[:sojourner_visit_uuid] = @current_visit.uuid
-      session[:sojourner_current_user_id] = current_user.try(:id)
+      session[:sojourn_visit_uuid] = @current_visit.uuid
+      session[:sojourn_current_user_id] = current_user.try(:id)
     end
 
     def track_user_change!
       current_visit.update_attributes(user_id: current_user.try(:id))
-      session[:sojourner_current_user_id] = current_user.try(:id)
+      session[:sojourn_current_user_id] = current_user.try(:id)
     end
 
     def mark_active!(time = Time.now)
-      session[:sojourner_last_active_at] = time
+      session[:sojourn_last_active_at] = time
     end
 
   private
@@ -69,11 +69,11 @@ module Sojourn
     end
 
     def unknown_visitor?
-      session[:sojourner_visitor_uuid].blank?
+      session[:sojourn_visitor_id].blank?
     end
 
     def expired_visitor?
-      session[:sojourner_last_active_at] < @now - 1.week
+      session[:sojourn_last_active_at] < @now - 1.week
     end
 
     # Visit Tracking Policy
@@ -83,11 +83,11 @@ module Sojourn
     end
 
     def unknown_visit?
-      session[:sojourner_visit_uuid].blank?
+      session[:sojourn_visit_uuid].blank?
     end
 
     def expired_visit?
-      session[:sojourner_last_active_at] < @now - 1.day
+      session[:sojourn_last_active_at] < @now - 1.day
     end
 
     def logged_out?
@@ -95,11 +95,11 @@ module Sojourn
     end
 
     def user_changed?
-      current_user.try(:id) != session[:sojourner_current_user_id]
+      current_user.try(:id) != session[:sojourn_current_user_id]
     end
 
     def user_added?
-      current_user && session[:sojourner_current_user_id].blank?
+      current_user && session[:sojourn_current_user_id].blank?
     end
 
     def new_visit_required?
