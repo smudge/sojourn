@@ -7,4 +7,12 @@ Sojourn.configure do |config|
   #
   # config.campaign_params += [:my_custom_tracking_param]
 
+  # New "Visitors" and "Visits" will be created after a certain period of inactivity.
+  # The default is 1 week and 1 day, respectively, but you may override that here.
+  # Setting the value to `nil` will make them never expire as long as they continue
+  # to exist in the session.
+  #
+  # config.visitor_expires_after = 1.week
+  # config.visit_expires_after = 1.day
+
 end

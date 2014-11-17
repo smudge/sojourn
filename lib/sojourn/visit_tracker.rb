@@ -73,7 +73,8 @@ module Sojourn
     end
 
     def expired_visitor?
-      session[:sojourn_last_active_at] < @now - 1.week
+      return unless Sojourn.config.visitor_expires_after
+      session[:sojourn_last_active_at] < @now - Sojourn.config.visitor_expires_after
     end
 
     # Visit Tracking Policy
@@ -87,7 +88,8 @@ module Sojourn
     end
 
     def expired_visit?
-      session[:sojourn_last_active_at] < @now - 1.day
+      return unless Sojourn.config.visit_expires_after
+      session[:sojourn_last_active_at] < @now - Sojourn.config.visit_expires_after
     end
 
     def logged_out?
