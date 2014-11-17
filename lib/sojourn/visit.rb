@@ -1,10 +1,13 @@
 require_relative 'campaign'
+require_relative 'serializers/symbol'
 module Sojourn
   def self.table_name_prefix
     'sojourn_'
   end
 
   class Visit < ActiveRecord::Base
+
+    serialize :method, Serializers::Symbol
 
     belongs_to :visitor, foreign_key: :sojourn_visitor_id
     belongs_to :campaign, foreign_key: :sojourn_campaign_id
