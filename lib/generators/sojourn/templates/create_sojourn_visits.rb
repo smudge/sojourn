@@ -7,6 +7,7 @@ class CreateSojournVisits < ActiveRecord::Migration
       t.text :referrer, limit: 2048
       t.string :host, limit: 2048
       t.string :path, limit: 2048
+      t.string :method
       t.references :user
       t.timestamp :created_at
     end

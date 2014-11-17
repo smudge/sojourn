@@ -19,6 +19,7 @@ module Sojourn
         create! referrer: request.referer.try(:truncate, 2048),
                 host: request.host.try(:truncate, 2048),
                 path: request.fullpath.try(:truncate, 2048),
+                method: request.method_symbol,
                 campaign: Campaign.from_request(request),
                 visitor: visitor,
                 user: user,
