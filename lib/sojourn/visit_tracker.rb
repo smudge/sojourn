@@ -12,7 +12,7 @@ module Sojourn
     end
 
     def current_visitor
-      @current_visitor ||= Visitor.find_by_uuid(session[:sojourn_visitor_id])
+      @current_visitor ||= Visitor.find_by_uuid(session[:sojourn_visitor_uuid])
     end
 
     def track!(time = Time.now)
@@ -28,7 +28,7 @@ module Sojourn
 
     def track_visitor!(time = Time.now)
       @current_visitor = Visitor.create_from_request!(request, time)
-      session[:sojourn_visitor_id] = @current_visitor.uuid
+      session[:sojourn_visitor_uuid] = @current_visitor.uuid
       session[:sojourn_visit_uuid] = nil
       session[:sojourn_last_active_at] = nil
     end
@@ -69,7 +69,7 @@ module Sojourn
     end
 
     def unknown_visitor?
-      session[:sojourn_visitor_id].blank?
+      session[:sojourn_visitor_uuid].blank?
     end
 
     def expired_visitor?
