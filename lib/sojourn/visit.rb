@@ -19,7 +19,7 @@ module Sojourn
     class << self
 
       def create_from_request!(request, visitor, user = nil, time = Time.now)
-        create! referrer: request.referer.try(:truncate, 2048),
+        create! referer: request.referer.try(:truncate, 2048),
                 host: request.host.try(:truncate, 2048),
                 path: request.fullpath.try(:truncate, 2048),
                 method: request.method_symbol,
