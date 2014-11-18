@@ -15,26 +15,26 @@ module Sojourn
       @current_visitor ||= Visitor.find_by_uuid(session[:sojourn_visitor_uuid])
     end
 
-    def track!(time = Time.now)
+    def track!
       return if request.bot?
-      track_visitor!(time) if should_track_visitor?
+      track_visitor! if should_track_visitor?
       if should_track_visit?
-        track_visit!(time)
+        track_visit!
       elsif user_added?
         track_user_change!
       end
-      mark_active!(time)
+      mark_active!
     end
 
-    def track_visitor!(time = Time.now)
-      @current_visitor = Visitor.create!(created_at: time)
+    def track_visitor!
+      @current_visitor = Visitor.create!
       session[:sojourn_visitor_uuid] = @current_visitor.uuid
       session[:sojourn_visit_uuid] = nil
       session[:sojourn_last_active_at] = nil
     end
 
-    def track_visit!(time = Time.now)
-      @current_visit = current_visitor.visits.create!(request: request, user: current_user, created_at: time)
+    def track_visit!
+      @current_visit = current_visitor.visits.create!(request: request, user: current_user)
       session[:sojourn_visit_uuid] = @current_visit.uuid
       session[:sojourn_current_user_id] = current_user.try(:id)
     end
@@ -44,8 +44,8 @@ module Sojourn
       session[:sojourn_current_user_id] = current_user.try(:id)
     end
 
-    def mark_active!(time = Time.now)
-      session[:sojourn_last_active_at] = time
+    def mark_active!
+      session[:sojourn_last_active_at] = @now
     end
 
   private
