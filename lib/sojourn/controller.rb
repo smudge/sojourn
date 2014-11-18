@@ -1,5 +1,6 @@
 require_relative 'visit_tracker'
 require_relative 'event_tracker'
+require_relative 'request'
 
 module Sojourn
   module Controller
@@ -21,13 +22,17 @@ module Sojourn
     end
 
     def sojourn
-      @sojourn ||= EventTracker.new(current_visit)
+      @sojourn ||= EventTracker.new(sojourn_request, current_visit)
     end
 
   private
 
     def sojourn_visit_tracker
-      @sojourn_tracker ||= VisitTracker.new(request, session, current_user)
+      @sojourn_tracker ||= VisitTracker.new(sojourn_request, session, current_user)
+    end
+
+    def sojourn_request
+      @sojourn_request ||= Request.from_request(request)
     end
 
   end

@@ -16,7 +16,7 @@ module Sojourn
     end
 
     def track!(time = Time.now)
-      return if bot?
+      return if request.bot?
       track_visitor!(time) if should_track_visitor?
       if should_track_visit?
         track_visit!(time)
@@ -27,14 +27,14 @@ module Sojourn
     end
 
     def track_visitor!(time = Time.now)
-      @current_visitor = Visitor.create_from_request!(request, time)
+      @current_visitor = Visitor.create!(created_at: time)
       session[:sojourn_visitor_uuid] = @current_visitor.uuid
       session[:sojourn_visit_uuid] = nil
       session[:sojourn_last_active_at] = nil
     end
 
     def track_visit!(time = Time.now)
-      @current_visit = Visit.create_from_request!(request, current_visitor, current_user, time)
+      @current_visit = current_visitor.visits.create!(request: request, user: current_user, created_at: time)
       session[:sojourn_visit_uuid] = @current_visit.uuid
       session[:sojourn_current_user_id] = current_user.try(:id)
     end
@@ -51,16 +51,6 @@ module Sojourn
   private
 
     attr_accessor :request, :session, :current_user
-
-    # Browser & Bot Detection
-
-    def browser
-      @browser ||= Browser.new(user_agent: @request.user_agent)
-    end
-
-    def bot?
-      browser.bot?
-    end
 
     # Visitor Tracking Policy
 
@@ -105,15 +95,7 @@ module Sojourn
     end
 
     def new_visit_required?
-      outside_referer? || any_utm_data?
-    end
-
-    def outside_referer?
-      request.referer.present? && URI.parse(request.referer).host != request.host
-    end
-
-    def any_utm_data?
-      Sojourn.config.campaign_params.map { |p| request.params[p].present? }.any?
+      request.outside_referer? || request.any_utm_data?
     end
   end
 end

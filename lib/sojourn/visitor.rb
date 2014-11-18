@@ -1,4 +1,3 @@
-require 'browser'
 module Sojourn
 
   def self.table_name_prefix
@@ -12,16 +11,6 @@ module Sojourn
     has_many :users, through: :visits
 
     before_create { self.uuid = SecureRandom.uuid }
-
-    class << self
-
-      def create_from_request!(request, time = Time.now)
-        create! ip_address: request.remote_ip,
-                user_agent: request.user_agent,
-                created_at: time
-      end
-
-    end
 
   end
 end

@@ -17,13 +17,13 @@ module Sojourn
       end
 
       def create_config_file
-        template "config_initializer.rb", "config/initializers/sojourn.rb"
+        template 'config_initializer.rb', 'config/initializers/sojourn.rb'
       end
 
       def create_migrations
-        %w(visitors campaigns visits events).map { |m| "create_sojourn_#{m}" }.each do |name|
+        %w(visitors campaigns requests visits events).map { |m| "create_sojourn_#{m}" }.each do |name|
           if self.class.migration_exists?('db/migrate', name)
-            say "        #{set_color("skip", :yellow)}  #{name}.rb (migration already exists)"
+            say "        #{set_color('skip', :yellow)}  #{name}.rb (migration already exists)"
           else
             migration_template "#{name}.rb", "db/migrate/#{name}.rb"
             sleep 1
