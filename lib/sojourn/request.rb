@@ -16,7 +16,7 @@ module Sojourn
           path: request.fullpath.try(:truncate, 2048),
           controller: request.params[:controller],
           action: request.params[:action],
-          params: request.params.except(:controller, :action),
+          params: request.filtered_parameters.with_indifferent_access.except(:controller, :action),
           method: request.method_symbol,
           ip_address: request.remote_ip,
           user_agent: request.user_agent
