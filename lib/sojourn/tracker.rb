@@ -1,10 +1,13 @@
 require_relative 'visitor'
 require_relative 'visit'
-module Sojourn
-  class VisitTracker
+require_relative 'event'
 
-    def initialize(request, session, current_user = nil, now = Time.now)
-      self.request, self.session, self.current_user, @now = request, session, current_user, now
+module Sojourn
+  class Tracker
+
+    def initialize(request, session, current_user = nil)
+      self.request, self.session, self.current_user, @now =
+        Request.from_request(request), session, current_user, Time.now
     end
 
     def current_visit
@@ -15,7 +18,12 @@ module Sojourn
       @current_visitor ||= Visitor.find_by_uuid(session[:sojourn_visitor_uuid])
     end
 
-    def track!
+    def track!(event_name, properties = {})
+      Event.create! name: event_name, request: request, visit: current_visit,
+                    properties: properties, created_at: Time.now
+    end
+
+    def track_request!
       return if request.bot?
       track_visitor! if should_track_visitor?
       if should_track_visit?
