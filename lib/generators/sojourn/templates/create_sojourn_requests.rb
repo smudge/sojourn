@@ -5,6 +5,8 @@ class CreateSojournRequests < ActiveRecord::Migration
       t.string :host, limit: 2048
       t.string :path, limit: 2048
       t.string :method
+      t.string :controller
+      t.string :action
       t.string :ip_address
       t.text :params
       t.text :referer
