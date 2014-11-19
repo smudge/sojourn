@@ -13,7 +13,7 @@ module Sojourn
     def self.from_request(request)
       new referer: request.referer.try(:truncate, 2048),
           host: request.host.try(:truncate, 2048),
-          path: request.fullpath.try(:truncate, 2048),
+          path: request.path.try(:truncate, 2048),
           controller: request.params[:controller],
           action: request.params[:action],
           params: request.filtered_parameters.with_indifferent_access.except(:controller, :action),

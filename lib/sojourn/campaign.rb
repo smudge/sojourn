@@ -15,7 +15,7 @@ module Sojourn
     private
 
       def tracked_params(params)
-        params.slice(*Sojourn.config.campaign_params).delete_if { |k,v| v.blank? }
+        Hash[params.slice(*Sojourn.config.campaign_params).delete_if { |k,v| v.blank? }.sort]
       end
 
     end
