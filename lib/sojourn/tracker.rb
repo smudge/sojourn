@@ -1,110 +1,68 @@
-require_relative 'visitor'
-require_relative 'visit'
+require_relative 'request'
 require_relative 'event'
 
 module Sojourn
   class Tracker
+    attr_accessor :request, :session, :current_user
 
     def initialize(request, session, current_user = nil)
       self.request, self.session, self.current_user, @now =
         Request.from_request(request), session, current_user, Time.now
     end
 
-    def current_visit
-      @current_visit ||= Visit.find_by_uuid(session[:sojourn_visit_uuid])
+    def track!(event_name, properties = {}, user_id = current_user_id)
+      Event.create! sojourner_uuid: sojourner_uuid, name: event_name, request: request,
+                    properties: properties, user_id: user_id
     end
 
-    def current_visitor
-      @current_visitor ||= Visitor.find_by_uuid(session[:sojourn_visitor_uuid])
-    end
-
-    def track!(event_name, properties = {}, user_id = current_user.try(:id))
-      Event.create! name: event_name, request: request, visit: current_visit,
-                    properties: properties, created_at: Time.now, user_id: user_id
-    end
-
-    def track_request!
+    def sojourning!
       return if request.bot?
-      track_visitor! if should_track_visitor?
-      if should_track_visit?
-        track_visit!
-      elsif user_added?
-        track_user_change!
-      end
-      mark_active!
-    end
-
-    def track_visitor!
-      @current_visitor = Visitor.create!
-      session[:sojourn_visitor_uuid] = @current_visitor.uuid
-      session[:sojourn_visit_uuid] = nil
-      session[:sojourn_last_active_at] = nil
-    end
-
-    def track_visit!
-      @current_visit = current_visitor.visits.create!(request: request, user: current_user)
-      session[:sojourn_visit_uuid] = @current_visit.uuid
-      session[:sojourn_current_user_id] = current_user.try(:id)
+      track!('!sojourning') if sojourning?
+      track_user_change! if user_changed?
+      update_session!
     end
 
     def track_user_change!
-      track!('!logged_out', {}, session[:sojourn_current_user_id]) if session[:sojourn_current_user_id]
-      track!('!logged_in', {}, current_user.id) if current_user
-      session[:sojourn_current_user_id] = current_user.try(:id)
+      return unless user_changed?
+      track!('!logged_out', {}, tracked_user_id) if tracked_user_id
+      track!('!logged_in', {}, current_user_id) if current_user_id
     end
 
-    def mark_active!
-      session[:sojourn_last_active_at] = @now
+    def update_session!
+      session[:sojourner_uuid] ||= sojourner_uuid
+      session[:sojourn_user_id] = current_user_id
     end
 
   private
 
-    attr_accessor :request, :session, :current_user
-
-    # Visitor Tracking Policy
-
-    def should_track_visitor?
-      unknown_visitor? || expired_visitor?
+    def sojourner_uuid
+      @sojourner_uuid ||= session[:sojourner_uuid] || SecureRandom.uuid
     end
 
-    def unknown_visitor?
-      session[:sojourn_visitor_uuid].blank?
+    def sojourning?
+      request.outside_referer? || request.any_utm_data? || new_sojourner?
     end
 
-    def expired_visitor?
-      return unless Sojourn.config.visitor_expires_after
-      session[:sojourn_last_active_at] < @now - Sojourn.config.visitor_expires_after
+    def new_sojourner?
+      !session.include?(:sojourner_uuid)
     end
 
-    # Visit Tracking Policy
-
-    def should_track_visit?
-      unknown_visit? || expired_visit? || logged_out? || new_visit_required?
-    end
-
-    def unknown_visit?
-      session[:sojourn_visit_uuid].blank?
-    end
-
-    def expired_visit?
-      return unless Sojourn.config.visit_expires_after
-      session[:sojourn_last_active_at] < @now - Sojourn.config.visit_expires_after
-    end
-
-    def logged_out?
-      user_changed? && !user_added?
-    end
+    # Current User Tracking:
 
     def user_changed?
-      current_user.try(:id) != session[:sojourn_current_user_id]
+      user_tracked? && tracked_user_id != current_user_id
     end
 
-    def user_added?
-      current_user && session[:sojourn_current_user_id].blank?
+    def user_tracked?
+      session.include?(:sojourn_user_id)
     end
 
-    def new_visit_required?
-      request.outside_referer? || request.any_utm_data?
+    def current_user_id
+      current_user.try(:id)
+    end
+
+    def tracked_user_id
+      session[:sojourn_user_id]
     end
   end
 end

@@ -9,6 +9,7 @@ module Sojourn
     serialize :params
 
     belongs_to :campaign, foreign_key: :sojourn_campaign_id
+    has_many :events, foreign_key: :sojourn_request_id
 
     def self.from_request(request)
       new referer: request.referer.try(:truncate, 2048),

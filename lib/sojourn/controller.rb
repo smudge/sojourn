@@ -1,19 +1,10 @@
 require_relative 'tracker'
-require_relative 'request'
 
 module Sojourn
   module Controller
 
     def self.included(base)
-      base.before_filter :track_sojourn_request
-    end
-
-    def current_visit
-      @current_visit ||= sojourn.current_visit
-    end
-
-    def current_visitor
-      @current_visitor ||= sojourn.current_visitor
+      base.before_filter :track_sojourning
     end
 
     def sojourn
@@ -22,8 +13,8 @@ module Sojourn
 
   private
 
-    def track_sojourn_request
-      sojourn.track_request!
+    def track_sojourning
+      sojourn.sojourning!
     end
 
   end

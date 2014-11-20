@@ -2,8 +2,7 @@ module Sojourn
   class Campaign < ActiveRecord::Base
 
     has_many :requests, foreign_key: :sojourn_campaign_id
-    has_many :visits, through: :requests
-    has_many :visitors, through: :visits
+    has_many :events, through: :requests
 
     class << self
 

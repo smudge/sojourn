@@ -1,18 +1,14 @@
 Sojourn.configure do |config|
 
-  # A new "Visit" is created whenever a tracked campaign URL param is detected.
-  # Note: It is not recommended you use any of these params in links on your site,
-  #       or you will end up with many redundant "Visit" objects being created.
-  # Default value: [:utm_source, :utm_medium, :utm_term, :utm_content, :utm_campaign]
+  # A new '!sojourning' event is created whenever:
+  #    1. The 'referer' is external
+  #    2. There are utm-style parameters in the request.
+  #    3. The visitor is new and has never been assigned a 'sojourner_id' (i.e. direct traffic)
+  # You may customize the list of tracked parameters here.
+  # Note: It is not recommended you use any tracked params on internal links within your site,
+  #       or you will end up with many repeated '!sojourning' events.
+  # Default: [:utm_source, :utm_medium, :utm_term, :utm_content, :utm_campaign]
   #
   # config.campaign_params += [:my_custom_tracking_param]
-
-  # New "Visitors" and "Visits" will be created after a certain period of inactivity.
-  # The default is 1 week and 1 day, respectively, but you may override that here.
-  # Setting the value to `nil` will make them never expire as long as they continue
-  # to exist in the session.
-  #
-  # config.visitor_expires_after = 1.week
-  # config.visit_expires_after = 1.day
 
 end
