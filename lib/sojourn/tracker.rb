@@ -18,9 +18,9 @@ module Sojourn
       @current_visitor ||= Visitor.find_by_uuid(session[:sojourn_visitor_uuid])
     end
 
-    def track!(event_name, properties = {})
+    def track!(event_name, properties = {}, user_id = current_user.try(:id))
       Event.create! name: event_name, request: request, visit: current_visit,
-                    properties: properties, created_at: Time.now
+                    properties: properties, created_at: Time.now, user_id: user_id
     end
 
     def track_request!
@@ -48,7 +48,8 @@ module Sojourn
     end
 
     def track_user_change!
-      current_visit.update_attributes(user_id: current_user.try(:id))
+      track!('!logged_out', {}, session[:sojourn_current_user_id]) if session[:sojourn_current_user_id]
+      track!('!logged_in', {}, current_user.id) if current_user
       session[:sojourn_current_user_id] = current_user.try(:id)
     end
 
