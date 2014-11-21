@@ -13,6 +13,7 @@ module Sojourn
       self.name ||= browser.name
       self.version ||= browser.version
       self.platform ||= browser.platform
+      self.known ||= browser.known?
       self.bot ||= browser.bot?
       true # otherwise .valid? will return false
     end
