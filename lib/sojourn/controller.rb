@@ -8,7 +8,7 @@ module Sojourn
     end
 
     def sojourn
-      @sojourn ||= Tracker.new(request, session, current_user)
+      @sojourn ||= Tracker.new(self)
     end
 
   private
