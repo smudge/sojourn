@@ -16,7 +16,6 @@ module Sojourn
     end
 
     def sojourning!
-      return if request.bot?
       track!('!sojourning') if sojourning?
       track_user_change! if user_changed?
       update_session!

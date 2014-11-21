@@ -1,14 +1,16 @@
-require 'browser'
 require_relative 'campaign'
+require_relative 'browser'
 require_relative 'serializers/symbol'
 
 module Sojourn
   class Request < ActiveRecord::Base
+    attr_accessor :user_agent
 
     serialize :method, Serializers::Symbol
     serialize :params
 
     belongs_to :campaign, foreign_key: :sojourn_campaign_id
+    belongs_to :browser, foreign_key: :sojourn_browser_id
     has_many :events, foreign_key: :sojourn_request_id
 
     def self.from_request(request)
@@ -24,11 +26,8 @@ module Sojourn
     end
 
     before_validation do
-      self.campaign = Campaign.from_request(self)
-    end
-
-    def bot?
-      browser.bot?
+      self.campaign ||= Campaign.from_request(self)
+      self.browser ||= Browser.from_request(self) if user_agent
     end
 
     def outside_referer?
@@ -38,12 +37,5 @@ module Sojourn
     def any_utm_data?
       Sojourn.config.campaign_params.map { |p| params[p].present? }.any?
     end
-
-  private
-
-    def browser
-      @browser ||= Browser.new(user_agent: user_agent)
-    end
-
   end
 end
