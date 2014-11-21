@@ -20,7 +20,7 @@ module Sojourn
           controller: request.params[:controller],
           action: request.params[:action],
           params: request.filtered_parameters.with_indifferent_access.except(:controller, :action),
-          method: request.method_symbol,
+          method: request.request_method_symbol,
           ip_address: request.remote_ip,
           user_agent: request.user_agent
     end
