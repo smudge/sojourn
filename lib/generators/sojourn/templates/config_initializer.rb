@@ -11,4 +11,10 @@ Sojourn.configure do |config|
   #
   # config.campaign_params += [:my_custom_tracking_param]
 
+  # By default, sojourn uses a signed, permanent cookie to store the sojourner uuid. You
+  # may specifiy an alternate/custom session_store, or change the name of the cookie that
+  # gets created. (default is `:_sojourn`)
+  # config.session_store = Sojourn::SessionStores::Cookie
+  # config.cookie_name = :my_custom_cookie_name
+
 end
