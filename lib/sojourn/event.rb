@@ -4,6 +4,9 @@ module Sojourn
 
     belongs_to :request, foreign_key: :sojourn_request_id
     belongs_to :user
+    has_one :campaign, through: :request
+    has_one :browser, through: :request
+
     serialize :properties
 
     before_save do
