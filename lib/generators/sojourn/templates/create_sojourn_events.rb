@@ -11,6 +11,7 @@ class CreateSojournEvents < ActiveRecord::Migration
     add_index :sojourn_events, [:sojourner_uuid]
     add_index :sojourn_events, [:sojourn_request_id]
     add_index :sojourn_events, [:user_id]
+    add_index :sojourn_events, [:created_at]
     add_index :sojourn_events, [:name]
   end
 end
