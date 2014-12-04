@@ -16,9 +16,10 @@ module Sojourn
     end
 
     def sojourning!
-      return unless Sojourn.config.tracking_enabled
-      track!('!sojourning') if sojourning?
-      track_user_change! if user_changed?
+      if Sojourn.config.tracking_enabled
+        track!('!sojourning') if sojourning?
+        track_user_change! if user_changed?
+      end
       update_session!
     end
 
