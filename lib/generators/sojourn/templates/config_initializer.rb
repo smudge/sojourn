@@ -18,6 +18,15 @@ Sojourn.configure do |config|
   #
   # config.campaign_params += [:my_custom_tracking_param]
 
+  # By default, sojourn will attach `user_id`, `sojourner_uuid`, and a `created_at` timestamp
+  # to every event. If you would like to add additional properties, you may do so as follows.
+  # Note: This block will be called in the context of your controller.
+  #
+  # config.default_properties do |p|
+  #   p[:rails_env] = Rails.env
+  #   p[:my_custom_property] = method_defined_in_controller
+  # end
+
   # By default, sojourn uses a signed, permanent cookie to store the sojourner uuid. You
   # may specifiy an alternate/custom session_store, or change the name of the cookie that
   # gets created. (default is `:_sojourn`)

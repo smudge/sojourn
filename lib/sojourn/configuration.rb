@@ -6,9 +6,14 @@ class Configuration
   attr_accessor :session_store
   attr_accessor :cookie_name
   attr_accessor :tracking_enabled
+  attr_accessor :default_properties_block
 
   def initialize
     set_defaults
+  end
+
+  def default_properties(&block)
+    self.default_properties_block = block
   end
 
 private

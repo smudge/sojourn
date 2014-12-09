@@ -11,6 +11,7 @@ module Sojourn
     end
 
     def track!(event_name, properties = {}, user_id = current_user_id)
+      properties = default_event_properties.merge(properties)
       Event.create! sojourner_uuid: sojourner_uuid, name: event_name, request: request,
                     properties: properties, user_id: user_id
     end
@@ -58,6 +59,19 @@ module Sojourn
 
     def current_user_id
       current_user.try(:id)
+    end
+
+    def default_event_properties
+      @default_event_properties ||= fetch_default_properties
+    end
+
+    def fetch_default_properties(properties = {})
+      if Sojourn.config.default_properties_block
+        @ctx.define_singleton_method :sojourn_event_properties,
+                                     Sojourn.config.default_properties_block
+      end
+      @ctx.sojourn_event_properties(properties) if @ctx.respond_to? :sojourn_event_properties
+      properties
     end
   end
 end
