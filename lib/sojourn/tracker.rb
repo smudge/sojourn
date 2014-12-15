@@ -11,13 +11,14 @@ module Sojourn
     end
 
     def track!(event_name, properties = {}, user_id = current_user_id)
+      return unless Sojourn.tables_exist?
       properties = default_event_properties.merge(properties)
       Event.create! sojourner_uuid: sojourner_uuid, name: event_name, request: request,
                     properties: properties, user_id: user_id
     end
 
     def sojourning!
-      return unless Sojourn.config.tracking_enabled
+      return unless Sojourn.config.tracking_enabled && Sojourn.tables_exist?
       track!('!sojourning') if sojourning?
       track_user_change! if user_changed?
     end
