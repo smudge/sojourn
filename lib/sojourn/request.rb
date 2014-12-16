@@ -1,6 +1,7 @@
 require_relative 'campaign'
 require_relative 'browser'
 require_relative 'serializers/symbol'
+require 'addressable/uri'
 
 module Sojourn
   class Request < ActiveRecord::Base
@@ -31,7 +32,7 @@ module Sojourn
     end
 
     def outside_referer?
-      referer.present? && URI.parse(referer).host != host
+      referer.present? && Addressable::URI.parse(referer).host != host
     end
 
     def any_utm_data?

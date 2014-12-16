@@ -24,4 +24,5 @@ sojourn tracks the referer, utm data, and logged-in user (if any)).gsub("\n", ' 
   spec.add_development_dependency 'rake', '~> 10.0'
 
   spec.add_dependency 'browser', '>= 0.8.0'
+  spec.add_dependency 'addressable', '>= 2.3.1'
 end
