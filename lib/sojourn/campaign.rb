@@ -8,8 +8,7 @@ module Sojourn
 
       def from_request(request)
         return unless (params = tracked_params(request.params)).any?
-        where(path: request.path.downcase.try(:truncate, 2048))
-          .where(params: params.to_param.try(:truncate, 2048)).first_or_initialize
+        where(params: params.to_param.try(:truncate, 2048)).first_or_initialize
       end
 
     private
