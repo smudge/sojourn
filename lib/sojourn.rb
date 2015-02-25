@@ -19,6 +19,10 @@ module Sojourn
     @tables_exist ||= %w(sojourn_events sojourn_requests sojourn_browsers sojourn_campaigns)
                       .map { |t| ActiveRecord::Base.connection.table_exists?(t) }.all?
   end
+
+  def self.track_raw_event!(name, properties)
+    Event.create! sojourner_uuid: '!unknown', name: name, properties: properties
+  end
 end
 
 ActionController::Base.send :include, Sojourn::Controller
