@@ -3,7 +3,7 @@ class CreateSojournEvents < ActiveRecord::Migration
     create_table :sojourn_events do |t|
       t.string :sojourner_uuid, limit: 36, null: false
       t.string :name
-      t.text :properties
+      t.column :properties, :jsonb
       t.references :sojourn_request
       t.references :user
       t.timestamp :created_at

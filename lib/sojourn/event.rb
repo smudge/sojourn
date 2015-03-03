@@ -1,3 +1,5 @@
+require_relative 'serializers/indifferent_json'
+
 module Sojourn
   class Event < ActiveRecord::Base
     DEFAULT_FIELDS = [:id, :sojourner_uuid, :name, :properties, :sojourn_request_id, :user_id, :created_at]
@@ -7,7 +9,7 @@ module Sojourn
     has_one :campaign, through: :request
     has_one :browser, through: :request
 
-    serialize :properties
+    serialize :properties, Serializers::IndifferentJSON
 
     before_save do
       properties.keys.map(&:to_sym).each do |key|
