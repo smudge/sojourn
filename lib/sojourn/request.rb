@@ -38,5 +38,15 @@ module Sojourn
     def any_utm_data?
       Sojourn.config.campaign_params.map { |p| params[p].present? }.any?
     end
+
+    def tracked_params
+      Hash[filter_params.sort.map { |k, v| [k.downcase, v.downcase] }]
+    end
+
+  private
+
+    def filter_params
+      params.slice(*Sojourn.config.campaign_params).delete_if { |_, v| v.blank? }
+    end
   end
 end

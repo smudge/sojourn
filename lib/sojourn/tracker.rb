@@ -70,6 +70,7 @@ module Sojourn
                                      Sojourn.config.default_properties_block
       end
       @ctx.sojourn_event_properties(properties) if @ctx.respond_to? :sojourn_event_properties
+      properties.merge!(campaign: request.tracked_params) if request.tracked_params.any?
       properties
     end
   end
