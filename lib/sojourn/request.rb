@@ -43,6 +43,18 @@ module Sojourn
       Hash[filter_params.sort.map { |k, v| [k.downcase, v.downcase] }]
     end
 
+    def browser_data
+      return @browser_data if @browser_data
+      b = browser.try(:send, :browser) || ::Browser.new(user_agent: user_agent)
+      @browser_data = {
+        name: b.name,
+        version: b.version,
+        platform: b.platform,
+        bot: b.bot?,
+        known: b.known?
+      }
+    end
+
   private
 
     def filter_params
