@@ -36,11 +36,11 @@ module Sojourn
     end
 
     def any_utm_data?
-      Sojourn.config.campaign_params.map { |p| params[p].present? }.any?
+      tracked_param_keys.map { |p| downcased_params[p].present? }.any?
     end
 
     def tracked_params
-      Hash[filter_params.sort.map { |k, v| [k.downcase, v.downcase] }]
+      Hash[downcased_params.slice(*tracked_param_keys).delete_if { |_, v| v.blank? }.sort]
     end
 
     def browser_data
@@ -57,8 +57,12 @@ module Sojourn
 
   private
 
-    def filter_params
-      params.slice(*Sojourn.config.campaign_params).delete_if { |_, v| v.blank? }
+    def downcased_params
+      params.each_with_object({}) { |(k, v), h| h[k.to_s.downcase] = v }
+    end
+
+    def tracked_param_keys
+      Sojourn.config.campaign_params.map(&:to_s).map(&:downcase)
     end
   end
 end
