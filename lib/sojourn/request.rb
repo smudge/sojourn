@@ -66,6 +66,8 @@ module Sojourn
         medium: p[:medium],
         term: p[:term]
       }
+    rescue
+      @referer_data = {}
     end
 
   private
