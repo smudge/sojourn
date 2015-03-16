@@ -58,7 +58,7 @@ module Sojourn
 
     def referer_data
       return @referer_data if @referer_data
-      p = RefererParser::Parser.new.parse(referer)
+      p = RefererParser::Parser.new.parse(sanitized_referer)
       @referer_data = {
         known: p[:known],
         host: referer_host,
@@ -71,7 +71,15 @@ module Sojourn
   private
 
     def referer_host
-      @referer_host ||= Addressable::URI.parse(referer).host
+      @referer_host ||= parsed_referer.host
+    end
+
+    def sanitized_referer
+      @sanitized_referer ||= parsed_referer.display_uri
+    end
+
+    def parsed_referer
+      @parsed_referer ||= Addressable::URI.parse(referer)
     end
 
     def downcased_params
