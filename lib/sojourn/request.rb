@@ -2,6 +2,7 @@ require_relative 'campaign'
 require_relative 'browser'
 require_relative 'serializers/symbol'
 require 'addressable/uri'
+require 'referer-parser'
 
 module Sojourn
   class Request < ActiveRecord::Base
@@ -32,7 +33,7 @@ module Sojourn
     end
 
     def outside_referer?
-      referer.present? && Addressable::URI.parse(referer).host != host
+      referer.present? && referer_host != host
     end
 
     def any_utm_data?
@@ -55,7 +56,23 @@ module Sojourn
       }
     end
 
+    def referer_data
+      return @referer_data if @referer_data
+      p = RefererParser::Parser.new.parse(referer)
+      @referer_data = {
+        known: p[:known],
+        host: referer_host,
+        source: p[:source],
+        medium: p[:medium],
+        term: p[:term]
+      }
+    end
+
   private
+
+    def referer_host
+      @referer_host ||= Addressable::URI.parse(referer).host
+    end
 
     def downcased_params
       params.each_with_object({}) { |(k, v), h| h[k.to_s.downcase] = v }
