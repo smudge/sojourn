@@ -19,9 +19,7 @@ associated with this UUID and with the current user's ID (if logged-in).
 
 Events (`Sojourn::Event`) consist of a name, a set of properties (key-value hash) and information
 about the request. In the current ActiveRecord implementation, requests (`Sojourn::Request`) can
-be queried separately and may have many events. Requests also track browser (`Sojourn::Browser`)
-and campaign (`Sojourn::Campaign`) info as unique models. See 'Usage' below for the details
-of these models.
+be queried separately and may have many events. See 'Usage' below for the details of these models.
 
 
 ## Usage
@@ -47,13 +45,8 @@ r.params
 r.method
 r.ip_address
 r.user_agent
-r.campaign           # Sojourn::Campaign object (nil if no campaign detected)
-r.browser            # Browser object
-
-c = Sojourn::Campaign.last
-c.path               # Base path (e.g. '/posts/2')
-c.params             # Notable (tracked) params, sorted. (Typically utm-style, but configurable.)
-
+r.browser
+r.tracked_params
 ```
 
 ## Default Events

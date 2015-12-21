@@ -1,4 +1,3 @@
-require_relative 'campaign'
 require_relative 'serializers/symbol'
 require 'addressable/uri'
 require 'browser'
@@ -9,7 +8,6 @@ module Sojourn
     serialize :method, Serializers::Symbol
     serialize :params
 
-    belongs_to :campaign, foreign_key: :sojourn_campaign_id
     has_many :events, foreign_key: :sojourn_request_id
 
     def self.from_request(request)
@@ -22,10 +20,6 @@ module Sojourn
           method: request.request_method_symbol,
           ip_address: request.remote_ip,
           user_agent: request.user_agent
-    end
-
-    before_validation do
-      self.campaign ||= Campaign.from_request(self)
     end
 
     def outside_referer?
