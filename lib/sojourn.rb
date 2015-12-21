@@ -16,7 +16,7 @@ module Sojourn
   end
 
   def self.tables_exist?
-    @tables_exist ||= %w(sojourn_events sojourn_requests sojourn_browsers sojourn_campaigns)
+    @tables_exist ||= %w(sojourn_events sojourn_requests sojourn_campaigns)
                       .map { |t| ActiveRecord::Base.connection.table_exists?(t) }.all?
   end
 

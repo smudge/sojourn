@@ -1,18 +1,15 @@
 require_relative 'campaign'
-require_relative 'browser'
 require_relative 'serializers/symbol'
 require 'addressable/uri'
+require 'browser'
 require 'referer-parser'
 
 module Sojourn
   class Request < ActiveRecord::Base
-    attr_accessor :user_agent
-
     serialize :method, Serializers::Symbol
     serialize :params
 
     belongs_to :campaign, foreign_key: :sojourn_campaign_id
-    belongs_to :browser, foreign_key: :sojourn_browser_id
     has_many :events, foreign_key: :sojourn_request_id
 
     def self.from_request(request)
@@ -29,7 +26,6 @@ module Sojourn
 
     before_validation do
       self.campaign ||= Campaign.from_request(self)
-      self.browser ||= Browser.from_request(self) if user_agent
     end
 
     def outside_referer?
@@ -46,13 +42,12 @@ module Sojourn
 
     def browser_data
       return @browser_data if @browser_data
-      b = browser.try(:send, :browser) || ::Browser.new(user_agent: user_agent)
       @browser_data = {
-        name: b.name,
-        version: b.version,
-        platform: b.platform,
-        bot: b.bot?,
-        known: b.known?
+        name: browser.name,
+        version: browser.version,
+        platform: browser.platform,
+        bot: browser.bot?,
+        known: browser.known?
       }
     end
 
@@ -90,6 +85,10 @@ module Sojourn
 
     def tracked_param_keys
       Sojourn.config.campaign_params.map(&:to_s).map(&:downcase)
+    end
+
+    def browser
+      @browser ||= Browser.new(user_agent: user_agent) if user_agent
     end
   end
 end

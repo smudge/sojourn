@@ -46,16 +46,9 @@ r.action
 r.params
 r.method
 r.ip_address
+r.user_agent
 r.campaign           # Sojourn::Campaign object (nil if no campaign detected)
-r.browser            # Sojourn::Browser object
-
-b = Sojourn::Browser.last
-b.known?             # whether or not the browser was detected successfully
-b.user_agent
-b.name
-b.version
-b.platform
-b.bot?
+r.browser            # Browser object
 
 c = Sojourn::Campaign.last
 c.path               # Base path (e.g. '/posts/2')
