@@ -1,7 +1,6 @@
 module Sojourn
   module SessionStores
     class Cookie
-
       def initialize(ctx)
         @ctx = ctx
       end
@@ -43,7 +42,6 @@ module Sojourn
       def cookie_name
         @cookie_name ||= Sojourn.config.cookie_name
       end
-
     end
   end
 end

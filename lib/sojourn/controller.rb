@@ -2,7 +2,6 @@ require_relative 'tracker'
 
 module Sojourn
   module Controller
-
     def self.included(base)
       base.before_filter :track_sojourning
       base.before_filter :save_sojourn_session
@@ -21,6 +20,5 @@ module Sojourn
     def save_sojourn_session
       sojourn.update_session!
     end
-
   end
 end

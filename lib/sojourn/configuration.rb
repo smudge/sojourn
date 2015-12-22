@@ -1,7 +1,6 @@
 require_relative 'session_stores/cookie'
 
 class Configuration
-
   attr_accessor :campaign_params
   attr_accessor :session_store
   attr_accessor :cookie_name
@@ -24,5 +23,4 @@ private
     self.cookie_name = :_sojourn
     self.tracking_enabled = true
   end
-
 end
