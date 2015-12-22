@@ -13,7 +13,6 @@ module Sojourn
     def track!(event_name, properties = {}, user_id = current_user_id)
       return unless Sojourn.tables_exist?
       properties = default_event_properties.merge(properties)
-      Event.reset_column_information if Event.columns_hash['properties'].type != :jsonb
       Event.create! sojourner_uuid: sojourner_uuid, name: event_name, request: request,
                     properties: properties, user_id: user_id
     end
