@@ -25,6 +25,7 @@ sojourn tracks the referer, utm data, and logged-in user (if any)).gsub("\n", ' 
   spec.add_development_dependency 'rspec', '~> 3.4.0'
   spec.add_development_dependency 'rspec-its', '~> 1.2.0'
   spec.add_development_dependency 'sqlite3', '~> 1.3.0'
+  spec.add_development_dependency 'codeclimate-test-reporter', '~> 0.4.8'
 
   spec.add_dependency 'browser', '>= 0.8.0'
   spec.add_dependency 'addressable', '>= 2.3.1'
