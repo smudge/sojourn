@@ -4,15 +4,12 @@ require 'mocks/cookie'
 
 module Mocks
   class Controller
-    attr_accessor :current_user, :request
+    attr_accessor :current_user, :request, :cookies
 
-    def initialize(user, request)
+    def initialize(user = User.new, request = Request.new, cookies = Cookie.new)
       self.current_user = user
       self.request = request
-    end
-
-    def cookies
-      Cookie.new
+      self.cookies = cookies
     end
   end
 end

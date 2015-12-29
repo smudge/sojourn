@@ -1,11 +1,15 @@
 require 'spec_helper'
+require 'securerandom'
 require 'mocks/controller'
 
 module Sojourn
+  COOKIE_NAME = Sojourn.config.cookie_name
+
   describe Tracker do
     let(:user) { Mocks::User.new }
     let(:request) { Mocks::Request.new }
-    let(:ctx) { Mocks::Controller.new(user, request) }
+    let(:cookies) { Mocks::Cookie.new }
+    let(:ctx) { Mocks::Controller.new(user, request, cookies) }
     let(:tracker) { Tracker.new(ctx) }
 
     describe '#track!' do
@@ -29,6 +33,47 @@ module Sojourn
 
         its(:keys) { is_expected.to eq(%w(browser bar)) }
         its([:browser, :name]) { is_expected.to eq('Chrome') }
+      end
+    end
+
+    describe '#sojourning!' do
+      before { tracker.sojourning! }
+      subject { Event.last }
+
+      its(:name) { is_expected.to eq('!sojourning') }
+
+      context 'when already tracked once' do
+        before do
+          tracker.update_session!
+          Sojourn::Event.delete_all
+          tracker.sojourning!
+        end
+
+        it { is_expected.to be_nil }
+      end
+    end
+
+    describe 'update_session!' do
+      subject { cookies }
+
+      context 'before' do
+        its([COOKIE_NAME]) { is_expected.to be_nil }
+      end
+
+      context 'after running' do
+        before { tracker.update_session! }
+
+        its([COOKIE_NAME, :uuid]) { is_expected.to_not be_nil }
+        its([COOKIE_NAME, :user_id]) { is_expected.to eq(user.id) }
+
+        context 'with existing cookie' do
+          let(:sojourner_uuid) { SecureRandom.uuid }
+          let(:cookie_data) { { user_id: user.id, uuid: sojourner_uuid } }
+          let(:cookies) { Mocks::Cookie[{ COOKIE_NAME => cookie_data }] }
+
+          its([COOKIE_NAME, :uuid]) { is_expected.to eq(sojourner_uuid) }
+          its([COOKIE_NAME, :user_id]) { is_expected.to eq(user.id) }
+        end
       end
     end
   end

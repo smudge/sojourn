@@ -101,4 +101,3 @@ highly scalable data backends.
   website.
 * Relies solely on cookies to track visitor UUID across requests (no JS, fingerprinting, etc)
 * Relies on ActiveRecord for storage. (At a bigger scale, append-only logs are preferred)
-* There are no tests.
