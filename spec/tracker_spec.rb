@@ -51,6 +51,28 @@ module Sojourn
 
         it { is_expected.to be_nil }
       end
+
+      context 'when user changes' do
+        before do
+          tracker.update_session!
+          Sojourn::Event.delete_all
+          ctx.current_user = Mocks::User.new
+          tracker.sojourning!
+        end
+
+        its(:name) { is_expected.to eq('!logged_in') }
+      end
+
+      context 'when user logs out' do
+        before do
+          tracker.update_session!
+          Sojourn::Event.delete_all
+          ctx.current_user = nil
+          tracker.sojourning!
+        end
+
+        its(:name) { is_expected.to eq('!logged_out') }
+      end
     end
 
     describe 'update_session!' do
