@@ -27,7 +27,7 @@ module Sojourn
       describe 'properties' do
         subject { Event.last.properties }
 
-        its(:keys) { is_expected.to eq(['browser', 'bar']) }
+        its(:keys) { is_expected.to eq(%w(browser bar)) }
         its([:browser, :name]) { is_expected.to eq('Chrome') }
       end
     end
