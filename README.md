@@ -1,4 +1,4 @@
-# Sojourn [![Build Status](https://travis-ci.org/smudge/sojourn.svg)](https://travis-ci.org/smudge/sojourn) [![Code Climate](https://codeclimate.com/github/smudge/sojourn/badges/gpa.svg)](https://codeclimate.com/github/smudge/sojourn) [![Test Coverage](https://codeclimate.com/github/smudge/sojourn/badges/coverage.svg)](https://codeclimate.com/github/smudge/sojourn/coverage)
+# Sojourn [![Build Status](https://img.shields.io/travis/smudge/sojourn.svg)](https://travis-ci.org/smudge/sojourn) [![Code Climate](https://img.shields.io/codeclimate/github/smudge/sojourn.svg)](https://codeclimate.com/github/smudge/sojourn) [![Test Coverage](https://img.shields.io/codeclimate/coverage/github/smudge/sojourn.svg)](https://codeclimate.com/github/smudge/sojourn/coverage)
 
 Simple source & event tracking for Rails. This gem automatically tracks *sojourners*
 (i.e. unique visitors) based on:
