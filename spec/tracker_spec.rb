@@ -12,9 +12,23 @@ module Sojourn
       let(:event_name) { 'foo' }
       let(:opts) { { bar: true } }
       before { tracker.track!(event_name, opts) }
+      subject { Event.last }
 
-      it 'should create an event' do
-        expect(Event.count).to eq(1)
+      its(:user_id) { is_expected.to eq(user.id) }
+      its(:name) { is_expected.to eq(event_name) }
+
+      describe 'request' do
+        subject { Event.last.request }
+
+        its(:params) { is_expected.to eq('filtered' => true) }
+        its(:method) { is_expected.to eq(:get) }
+      end
+
+      describe 'properties' do
+        subject { Event.last.properties }
+
+        its(:keys) { is_expected.to eq(['browser', 'bar']) }
+        its([:browser, :name]) { is_expected.to eq('Chrome') }
       end
     end
   end

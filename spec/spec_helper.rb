@@ -1,13 +1,15 @@
 require 'bundler/setup'
 Bundler.setup
 
+require 'rspec/its'
 require 'rails'
 require 'active_record'
 require 'sojourn'
 
 RSpec.configure do |config|
   config.before(:suite) do
-    ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
+    ActiveRecord::Base.establish_connection adapter: 'sqlite3',
+                                            database: ':memory:'
 
     ActiveRecord::Schema.define do
       self.verbose = false

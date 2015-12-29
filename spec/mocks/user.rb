@@ -1,10 +1,8 @@
-require 'securerandom'
-
 module Mocks
   class User
     attr_accessor :id
 
-    def initialize(id = SecureRandom.uuid)
+    def initialize(id = rand(10000))
       self.id = id
     end
   end
