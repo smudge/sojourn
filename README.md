@@ -1,4 +1,4 @@
-# Sojourn
+# Sojourn [![Build Status](https://travis-ci.org/smudge/sojourn.svg)](https://travis-ci.org/smudge/sojourn)
 
 Simple source & event tracking for Rails. This gem automatically tracks *sojourners*
 (i.e. unique visitors) based on:
