@@ -28,6 +28,12 @@ be queried separately and may have many events. See 'Usage' below for the detail
 # Track a custom event (highly encouraged!):
 sojourn.track! 'clicked call-to-action', plan_choice: 'enterprise'
 
+# If you don't have access to a controller context (i.e. the event is not occurring during a web
+# request), you can still track a raw event like this:
+
+Sojourn.track_raw_event! 'subscription expired', plan: 'enterprise', customer_id: 'xyb123'
+
+# Read events using ActiveRecord
 e = Sojourn::Event.last
 e.name               # event name (e.g. 'clicked call-to-action')
 e.sojourner_uuid     # uuid tracked across requests, stored in cookie
