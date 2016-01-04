@@ -33,20 +33,6 @@ e.name               # event name (e.g. 'clicked call-to-action')
 e.sojourner_uuid     # uuid tracked across requests, stored in cookie
 e.user               # User or nil
 e.properties         # key-value hash (e.g. "{ plan_choice: 'enterprise' }")
-e.request            # Sojourn::Request object
-
-r = Sojourn::Request.last
-r.referer
-r.host
-r.path
-r.controller
-r.action
-r.params
-r.method
-r.ip_address
-r.user_agent
-r.browser
-r.tracked_params
 ```
 
 ## Default Events
@@ -66,6 +52,42 @@ A `'!sojourning'` event takes place whenever any of the following is true:
 * The request contains tracked (utm-style) parameters. (These can be configured in the `sojourn.rb`
   initializer.)
 
+
+## Properties
+
+In addition to properties that you manually add, events will automatically include data about
+the current web request. An example looks like this:
+
+```json
+{
+  "custom_property":"value",
+  "request":{
+    "uuid":"5e698f6ca74a016c49ca6b91a79cada7",
+    "host":"example.com",
+    "path":"/my-news",
+    "controller":"news",
+    "action":"index",
+    "method":"get",
+    "params":{
+      "utm_campaign":"daily_updates",
+      "page":"1"
+    },
+    "referer":"https://mail.google.com",
+    "ip_address":"42.42.42.42",
+    "user_agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.48 Safari/537.36"
+  },
+  "browser":{
+    "bot":false,
+    "name":"Chrome",
+    "known":true,
+    "version":"48",
+    "platform":"mac"
+  },
+  "campaign":{
+    "utm_campaign":"daily_updates"
+  }
+}
+```
 
 ## Installation
 
