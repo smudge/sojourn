@@ -13,7 +13,7 @@ module Sojourn
     def track!(event_name, properties = {}, user_id = current_user_id)
       return unless Sojourn.tables_exist?
       properties = default_event_properties.merge(properties)
-      Event.create! sojourner_uuid: sojourner_uuid, name: event_name, request: request,
+      Event.create! sojourner_uuid: sojourner_uuid, name: event_name,
                     properties: properties, user_id: user_id
     end
 
@@ -37,7 +37,7 @@ module Sojourn
   private
 
     def request
-      @request ||= Request.from_request(ctx.request)
+      @request ||= Request.new(ctx.request)
     end
 
     def session
@@ -70,9 +70,10 @@ module Sojourn
                                      Sojourn.config.default_properties_block
       end
       @ctx.sojourn_event_properties(properties) if @ctx.respond_to? :sojourn_event_properties
+      properties.merge! request: request.raw_data
       properties.merge! campaign: request.tracked_params if request.tracked_params.any?
       properties.merge! browser: request.browser_data
-      properties.merge! referer: request.referer_data if request.referer.present?
+      properties.merge! referer: request.referer_data if request.referer_data.any?
       properties
     end
   end

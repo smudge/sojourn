@@ -2,9 +2,8 @@ require_relative 'serializers/indifferent_json'
 
 module Sojourn
   class Event < ActiveRecord::Base
-    DEFAULT_FIELDS = %i(id sojourner_uuid name properties sojourn_request_id user_id created_at)
+    DEFAULT_FIELDS = %i(id sojourner_uuid name properties user_id created_at)
 
-    belongs_to :request, foreign_key: :sojourn_request_id
     belongs_to :user
 
     serialize :properties, Serializers::IndifferentJSON

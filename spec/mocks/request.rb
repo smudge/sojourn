@@ -1,3 +1,5 @@
+require 'securerandom'
+
 module Mocks
   class Request
     CHROME_UA = <<-EOF.squish
@@ -9,6 +11,10 @@ module Mocks
 
     def initialize(opts = {})
       @opts = opts
+    end
+
+    def uuid
+      opts[:uuid] || SecureRandom.uuid
     end
 
     def referer

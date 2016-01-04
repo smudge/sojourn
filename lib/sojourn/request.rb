@@ -1,25 +1,16 @@
-require_relative 'serializers/symbol'
+require 'securerandom'
 require 'addressable/uri'
 require 'browser'
 require 'referer-parser'
 
 module Sojourn
-  class Request < ActiveRecord::Base
-    serialize :method, Serializers::Symbol
-    serialize :params
+  class Request
+    KEYS = %w(uuid referer host path controller action params method ip_address user_agent)
 
-    has_many :events, foreign_key: :sojourn_request_id
+    attr_reader :request
 
-    def self.from_request(request)
-      new referer: request.referer.try(:truncate, 2048),
-          host: request.host.try(:truncate, 2048),
-          path: request.path.try(:truncate, 2048),
-          controller: request.params[:controller],
-          action: request.params[:action],
-          params: request.filtered_parameters.with_indifferent_access.except(:controller, :action),
-          method: request.request_method_symbol,
-          ip_address: request.remote_ip,
-          user_agent: request.user_agent
+    def initialize(request)
+      @request = request
     end
 
     def outside_referer?
@@ -32,6 +23,10 @@ module Sojourn
 
     def tracked_params
       Hash[downcased_params.slice(*tracked_param_keys).delete_if { |_, v| v.blank? }.sort]
+    end
+
+    def raw_data
+      Hash[KEYS.map { |k| [k, send(k)] }].with_indifferent_access
     end
 
     def browser_data
@@ -60,6 +55,46 @@ module Sojourn
     end
 
   private
+
+    def uuid
+      @uuid ||= request.uuid || SecureRandom.uuid
+    end
+
+    def referer
+      @referer ||= request.referer.try(:truncate, 2048)
+    end
+
+    def host
+      @host ||= request.host.try(:truncate, 2048)
+    end
+
+    def path
+      @path ||= request.path.try(:truncate, 2048)
+    end
+
+    def controller
+      @controller ||= request.params[:controller]
+    end
+
+    def action
+      @action ||= request.params[:action]
+    end
+
+    def params
+      @params ||= request.filtered_parameters.with_indifferent_access.except(:controller, :action)
+    end
+
+    def method
+      @method ||= request.request_method_symbol
+    end
+
+    def ip_address
+      @ip_address ||= request.remote_ip
+    end
+
+    def user_agent
+      @user_agent ||= request.user_agent
+    end
 
     def referer_host
       @referer_host ||= parsed_referer.host
