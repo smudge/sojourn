@@ -73,6 +73,19 @@ module Sojourn
 
         its(:name) { is_expected.to eq('!logged_out') }
       end
+
+      context 'when user agent not present' do
+        let(:request) { Mocks::Request.new(user_agent: nil) }
+
+        its(:name) { is_expected.to eq('!sojourning') }
+
+        describe 'properties' do
+          subject { Event.last.properties }
+
+          its([:browser, :known]) { is_expected.to be(false) }
+          its([:browser, :name]) { is_expected.to be_nil }
+        end
+      end
     end
 
     describe 'update_session!' do

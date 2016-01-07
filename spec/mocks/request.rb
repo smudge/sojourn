@@ -50,7 +50,7 @@ module Mocks
     end
 
     def user_agent
-      opts[:user_agent] || CHROME_UA
+      opts.key?(:user_agent) ? opts[:user_agent] : CHROME_UA
     end
   end
 end

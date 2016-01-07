@@ -31,7 +31,8 @@ module Sojourn
 
     def browser_data
       return @browser_data if @browser_data
-      @browser_data = {
+      @browser_data = { known: false } unless browser
+      @browser_data ||= {
         name: browser.name,
         version: browser.version,
         platform: browser.platform,
