@@ -21,17 +21,12 @@ module Sojourn
       its(:user_id) { is_expected.to eq(user.id) }
       its(:name) { is_expected.to eq(event_name) }
 
-      describe 'request' do
-        subject { Event.last.properties[:request] }
-
-        its([:params]) { is_expected.to eq('filtered' => true) }
-        its([:method]) { is_expected.to eq('get') }
-      end
-
       describe 'properties' do
         subject { Event.last.properties }
 
         its(:keys) { is_expected.to eq(%w(request browser bar)) }
+        its([:request, :params]) { is_expected.to eq('filtered' => true) }
+        its([:request, :method]) { is_expected.to eq('get') }
         its([:browser, :name]) { is_expected.to eq('Chrome') }
       end
     end
