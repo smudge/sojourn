@@ -12,8 +12,8 @@ Gem::Specification.new do |spec|
 Sojourn tracks site visitors and sources, with the ability to recognise
 multiple sources per visitor. Each time a new source is detected,
 sojourn tracks the referer, utm data, and logged-in user (if any)).gsub("\n", ' ')
-  spec.homepage      = ''
-  spec.license       = ''
+  spec.homepage      = 'https://github.com/smudge/sojourn'
+  spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(/^bin/) { |f| File.basename(f) }
