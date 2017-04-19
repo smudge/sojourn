@@ -27,6 +27,7 @@ sojourn tracks the referer, utm data, and logged-in user (if any)).tr("\n", ' ')
   spec.add_development_dependency 'sqlite3', '~> 1.3.0'
   spec.add_development_dependency 'simplecov', '~> 0.11.1'
   spec.add_development_dependency 'codeclimate-test-reporter', '~> 1.0.8'
+  spec.add_development_dependency 'rubocop', '~> 0.48.1'
 
   spec.add_dependency 'browser', '~> 0.8.0'
   spec.add_dependency 'addressable', '~> 2.3.1'
