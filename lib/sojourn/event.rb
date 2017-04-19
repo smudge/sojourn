@@ -2,7 +2,7 @@ require_relative 'serializers/indifferent_json'
 
 module Sojourn
   class Event < ActiveRecord::Base
-    DEFAULT_FIELDS = %i(id sojourner_uuid name properties user_id created_at)
+    DEFAULT_FIELDS = %i[id sojourner_uuid name properties user_id created_at].freeze
 
     belongs_to :user
 

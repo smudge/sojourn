@@ -21,7 +21,7 @@ module Sojourn
       end
 
       def create_migrations
-        %w(events).map { |m| "create_sojourn_#{m}" }.each do |name|
+        %w[events].map { |m| "create_sojourn_#{m}" }.each do |name|
           if self.class.migration_exists?('db/migrate', name)
             say "        #{set_color('skip', :yellow)}  #{name}.rb (migration already exists)"
           else

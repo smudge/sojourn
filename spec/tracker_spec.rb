@@ -5,7 +5,7 @@ require 'mocks/controller'
 module Sojourn
   COOKIE_NAME = Sojourn.config.cookie_name
 
-  describe Tracker do
+  describe Tracker do # rubocop:disable Metrics/BlockLength
     let(:user) { Mocks::User.new }
     let(:request) { Mocks::Request.new }
     let(:cookies) { Mocks::Cookie.new }
@@ -24,14 +24,14 @@ module Sojourn
       describe 'properties' do
         subject { Event.last.properties }
 
-        its(:keys) { is_expected.to eq(%w(request browser bar)) }
-        its([:request, :params]) { is_expected.to eq('filtered' => true) }
-        its([:request, :method]) { is_expected.to eq('get') }
-        its([:browser, :name]) { is_expected.to eq('Chrome') }
+        its(:keys) { is_expected.to eq(%w[request browser bar]) }
+        its(%i[request params]) { is_expected.to eq('filtered' => true) }
+        its(%i[request method]) { is_expected.to eq('get') }
+        its(%i[browser name]) { is_expected.to eq('Chrome') }
       end
     end
 
-    describe '#sojourning!' do
+    describe '#sojourning!' do # rubocop:disable Metrics/BlockLength
       before { tracker.sojourning! }
       subject { Event.last }
 
@@ -77,8 +77,8 @@ module Sojourn
         describe 'properties' do
           subject { Event.last.properties }
 
-          its([:browser, :known]) { is_expected.to be(false) }
-          its([:browser, :name]) { is_expected.to be_nil }
+          its(%i[browser known]) { is_expected.to be(false) }
+          its(%i[browser name]) { is_expected.to be_nil }
         end
       end
     end

@@ -64,16 +64,16 @@ module Sojourn
       @default_event_properties ||= fetch_default_properties
     end
 
-    def fetch_default_properties(properties = {})
+    def fetch_default_properties(properties = {}) # rubocop:disable Metrics/AbcSize
       if Sojourn.config.default_properties_block
         @ctx.define_singleton_method :sojourn_event_properties,
                                      Sojourn.config.default_properties_block
       end
       @ctx.sojourn_event_properties(properties) if @ctx.respond_to? :sojourn_event_properties
-      properties.merge! request: request.raw_data
-      properties.merge! campaign: request.tracked_params if request.tracked_params.any?
-      properties.merge! browser: request.browser_data
-      properties.merge! referer: request.referer_data if request.referer_data.any?
+      properties[:request] = request.raw_data
+      properties[:campaign] = request.tracked_params if request.tracked_params.any?
+      properties[:browser] = request.browser_data
+      properties[:referer] = request.referer_data if request.referer_data.any?
       properties
     end
   end

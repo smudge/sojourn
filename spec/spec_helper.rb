@@ -9,7 +9,7 @@ require 'rails'
 require 'active_record'
 require 'sojourn'
 
-RSpec.configure do |config|
+RSpec.configure do |config| # rubocop:disable Metrics/BlockLength
   config.before(:suite) do
     ActiveRecord::Base.establish_connection adapter: 'sqlite3',
                                             database: ':memory:'

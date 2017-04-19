@@ -2,7 +2,7 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'sojourn/version'
 
-Gem::Specification.new do |spec|
+Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
   spec.name          = 'sojourn'
   spec.version       = Sojourn::VERSION
   spec.authors       = ['Smudge']
@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.description   = %(
 Sojourn tracks site visitors and sources, with the ability to recognise
 multiple sources per visitor. Each time a new source is detected,
-sojourn tracks the referer, utm data, and logged-in user (if any)).gsub("\n", ' ')
+sojourn tracks the referer, utm data, and logged-in user (if any)).tr("\n", ' ')
   spec.homepage      = 'https://github.com/smudge/sojourn'
   spec.license       = 'MIT'
 

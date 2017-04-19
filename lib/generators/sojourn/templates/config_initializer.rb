@@ -1,5 +1,4 @@
 Sojourn.configure do |config|
-
   # A new '!sojourning' event is created whenever:
   #    1. The 'referer' is external
   #    2. There are utm-style parameters in the request.
@@ -33,5 +32,4 @@ Sojourn.configure do |config|
   #
   # config.session_store = Sojourn::SessionStores::Cookie
   # config.cookie_name = :my_custom_cookie_name
-
 end

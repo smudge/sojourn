@@ -5,7 +5,7 @@ require 'referer-parser'
 
 module Sojourn
   class Request
-    KEYS = %w(uuid referer host path controller action params method ip_address user_agent)
+    KEYS = %w[uuid referer host path controller action params method ip_address user_agent].freeze
 
     attr_reader :request
 
@@ -41,7 +41,7 @@ module Sojourn
       }
     end
 
-    def referer_data
+    def referer_data # rubocop:disable Metrics/MethodLength
       return @referer_data if @referer_data
       p = RefererParser::Parser.new.parse(sanitized_referer)
       @referer_data = {

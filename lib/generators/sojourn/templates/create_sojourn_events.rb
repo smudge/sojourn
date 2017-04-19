@@ -1,5 +1,5 @@
 class CreateSojournEvents < ActiveRecord::Migration
-  def change
+  def change # rubocop:disable Metrics/MethodLength
     create_table :sojourn_events do |t|
       t.string :sojourner_uuid, limit: 36, null: false
       t.string :name
