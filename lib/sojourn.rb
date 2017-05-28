@@ -15,9 +15,8 @@ module Sojourn
     @config ||= Configuration.new
   end
 
-  def self.tables_exist?
-    @tables_exist ||= %w[sojourn_events sojourn_requests]
-                      .map { |t| ActiveRecord::Base.connection.table_exists?(t) }.all?
+  def self.table_exists?
+    @table_exists ||= ActiveRecord::Base.connection.table_exists?('sojourn_events')
   end
 
   def self.track_raw_event!(name, properties)
