@@ -1,4 +1,4 @@
-# Sojourn
+# Sojourn [![Test](https://github.com/smudge/sojourn/actions/workflows/test.yml/badge.svg)](https://github.com/smudge/sojourn/actions/workflows/test.yml)
 
 Simple source & event tracking for Rails. This gem automatically tracks *sojourners*
 (i.e. unique visitors) based on:
