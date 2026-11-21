@@ -6,12 +6,38 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-22.04
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - ruby: '2.3'
+            os: ubuntu-22.04
+            bundler: '1.17.3'
+            gemfile: gemfiles/legacy.gemfile
+          - ruby: '3.2'
+            os: ubuntu-latest
+            bundler: default
+            gemfile: Gemfile
+          - ruby: '3.3'
+            os: ubuntu-latest
+            bundler: default
+            gemfile: Gemfile
+          - ruby: '3.4'
+            os: ubuntu-latest
+            bundler: default
+            gemfile: Gemfile
+          - ruby: '4.0'
+            os: ubuntu-latest
+            bundler: default
+            gemfile: Gemfile
+    env:
+      BUNDLE_GEMFILE: ${{ matrix.gemfile }}
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.3'
-          bundler: '1.17.3'
+          ruby-version: ${{ matrix.ruby }}
+          bundler: ${{ matrix.bundler }}
           bundler-cache: true
       - run: bundle exec rake

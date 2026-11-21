@@ -6,7 +6,11 @@ module Sojourn
 
     belongs_to :user
 
-    serialize :properties, Serializers::IndifferentJSON
+    if ActiveRecord::VERSION::MAJOR >= 7 && ActiveRecord::VERSION::MINOR >= 1 || ActiveRecord::VERSION::MAJOR >= 8
+      serialize :properties, coder: Serializers::IndifferentJSON
+    else
+      serialize :properties, Serializers::IndifferentJSON
+    end
 
     before_save do
       properties.keys.map(&:to_sym).each do |key|
