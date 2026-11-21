@@ -3,8 +3,9 @@ require_relative 'tracker'
 module Sojourn
   module Controller
     def self.included(base)
-      base.before_filter :track_sojourning
-      base.before_filter :save_sojourn_session
+      callback = base.respond_to?(:before_action) ? :before_action : :before_filter
+      base.public_send callback, :track_sojourning
+      base.public_send callback, :save_sojourn_session
     end
 
     def sojourn
