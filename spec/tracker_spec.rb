@@ -12,6 +12,26 @@ module Sojourn
     let(:ctx) { Mocks::Controller.new(user, request, cookies) }
     let(:tracker) { Tracker.new(ctx) }
 
+    describe 'external referers' do
+      let(:request) { Mocks::Request.new(host: 'example.com', referer: referer) }
+      subject { Sojourn::Request.new(request).outside_referer? }
+
+      context 'from the same host' do
+        let(:referer) { 'https://example.com/page' }
+        it { is_expected.to be(false) }
+      end
+
+      context 'from another host' do
+        let(:referer) { 'https://other.example/page' }
+        it { is_expected.to be(true) }
+      end
+
+      context 'without a referer' do
+        let(:referer) { nil }
+        it { is_expected.to be(false) }
+      end
+    end
+
     describe '#track!' do
       let(:event_name) { 'foo' }
       let(:opts) { { bar: true } }
